@@ -8,11 +8,13 @@ from object_detection.utils import dataset_util
 # Map your labels to numbers (IMPORTANT: Update with your classes)
 LABEL_MAP = {
     'BOL_Number': 1,
-    'Load_Start_Date': 2,
-    'Terminal': 3,
-    'Supplier': 4,
-    'Products': 5,
-    'Gallons': 6
+    'Load_Date': 2,
+    'Load_Time': 3
+    'Terminal': 4,
+    'Supplier': 5,
+    'Product_Name_List': 6,
+    'Product_Gross_List': 7,
+    'Product_Net_List': 8,
 }
 
 def xml_to_csv(path):
