@@ -1,5 +1,3 @@
-import os
-import tensorflow as tf
 from object_detection import model_main_tf2
 
 pipeline_config = '/model/ssd_mobilenet_v2_fpnlite_320x320_coco17_tpu-8/pipeline.config'
