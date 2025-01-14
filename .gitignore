@@ -1,3 +1,4 @@
 /dataset/images
 /dataset/labels
-dataset/train_labels.csv
+/dataset/train_labels.csv
+/dataset/train.record

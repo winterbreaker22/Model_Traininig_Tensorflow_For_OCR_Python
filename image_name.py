@@ -8,10 +8,10 @@ def rename_images(directory):
     # Sort files to maintain order
     files.sort()
     
-    # Rename files sequentially
+    # Rename files sequentially and change extension to .jpg
     for index, file in enumerate(files, start=1):
         old_path = os.path.join(directory, file)
-        new_filename = f"img{index}{os.path.splitext(file)[1]}"  # Keep original extension
+        new_filename = f"img{index}.jpg"  # Change extension to .jpg
         new_path = os.path.join(directory, new_filename)
         
         os.rename(old_path, new_path)
