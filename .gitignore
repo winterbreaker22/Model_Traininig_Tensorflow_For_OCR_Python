@@ -1,5 +1,4 @@
 /dataset/images
 /dataset/labels
 /models
-/io
 /tf_od_env
