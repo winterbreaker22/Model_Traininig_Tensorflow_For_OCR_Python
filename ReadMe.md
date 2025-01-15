@@ -25,6 +25,10 @@ pip install protobuf
 python object_detection/packages/tf2/setup.py install
 
 
+Powershell
+$env:PYTHONPATH="$env:PYTHONPATH;$PWD\models\research;$PWD\models\research\slim"
+
+
 
 # Compile the Protobuf Files
 
