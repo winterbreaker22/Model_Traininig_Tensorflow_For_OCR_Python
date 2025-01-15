@@ -10,8 +10,22 @@ labelImg
 
 
 
+# Clone the TensorFlow Models Repository
+
+git clone https://github.com/tensorflow/models.git
+cd models/research
+
+
+
+# Compile the Protobuf Files
+
+protoc object_detection/protos/*.proto --python_out=.
+
 
 
 # tensorflow-io package install
 
-pip install git+https://github.com/tensorflow/io.git
+https://pypi.org/simple/tensorflow-io/
+Download .whl file from this url
+
+pip install tensorflow_io-*.whl
