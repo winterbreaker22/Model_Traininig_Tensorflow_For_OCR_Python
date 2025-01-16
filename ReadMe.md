@@ -13,7 +13,7 @@ labelImg
 
 pip install tensorflow
 pip install tensorflow-io
-pip install absl-py numpy pandas pillow lxml matplotlib opencv-python tensorflow-addons Cython contextlib2
+pip install absl-py numpy pandas pillow lxml matplotlib opencv-python tensorflow-addons Cython contextlib2 gin-config pyyaml
 
 
 
