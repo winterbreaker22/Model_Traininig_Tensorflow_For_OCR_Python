@@ -8,7 +8,6 @@ git clone https://github.com/tensorflow/models.git
 cd models/
 
 
-
 # Packages install
 
 pip install tensorflow-text==2.10.0
@@ -22,9 +21,8 @@ cd ..
 cd research
 python object_detection/packages/tf2/setup.py install
 
-Powershell
-$env:PYTHONPATH="$env:PYTHONPATH;$PWD\models\research;$PWD\models\research\slim"
-
+Cmd
+set PYTHONPATH=%cd%;%cd%\slim
 
 
 # Protoc Setup and compile
