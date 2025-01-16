@@ -1,3 +1,4 @@
+@ -1,38 +0,0 @@
 
 
 # Python version 3.10
@@ -34,5 +35,4 @@ Download protoc.exe or zip file
 Add protoc.exe to Env Variable
 
 protoc object_detection/protos/*.proto --python_out=.
-
 
