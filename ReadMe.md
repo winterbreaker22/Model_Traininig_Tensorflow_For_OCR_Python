@@ -24,6 +24,9 @@ python object_detection/packages/tf2/setup.py install
 Cmd
 set PYTHONPATH=%cd%;%cd%\slim
 
+Powershell
+$env:PYTHONPATH = "$(Get-Location):$(Get-Location)\slim"
+
 
 # Protoc Setup and compile
 
