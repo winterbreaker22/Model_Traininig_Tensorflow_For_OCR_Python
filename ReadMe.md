@@ -28,6 +28,13 @@ $env:PYTHONPATH="$env:PYTHONPATH;$PWD\models\research;$PWD\models\research\slim"
 
 
 
+# Protoc Setup
+
+Download protoc.exe or zip file
+Add protoc.exe to Env Variable
+
+
+
 # Compile the Protobuf Files
 
 protoc object_detection/protos/*.proto --python_out=.
