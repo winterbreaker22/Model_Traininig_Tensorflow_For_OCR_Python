@@ -1,19 +1,12 @@
-packages to be installed
-
-tensorflow
-numpy
-matplotlib
-opencv-python
-object-detection
-labelImg
-
 
 
 # Python version 3.10
 
+# Packages install
+
 pip install tensorflow
 pip install tensorflow-io
-pip install absl-py numpy pandas pillow lxml matplotlib opencv-python tensorflow-addons Cython contextlib2 gin-config pyyaml
+pip install numpy pandas pillow lxml matplotlib opencv-python tensorflow-addons Cython contextlib2 gin-config pyyaml
 
 
 
@@ -28,16 +21,12 @@ $env:PYTHONPATH="$env:PYTHONPATH;$PWD\models\research;$PWD\models\research\slim"
 
 
 
-# Protoc Setup
-
-Download protoc.exe or zip file
-Add protoc.exe to Env Variable
+# Protoc Setup and compile
 
 pip install protobuf==3.20.3
 
-
-
-# Compile the Protobuf Files
+Download protoc.exe or zip file
+Add protoc.exe to Env Variable
 
 protoc object_detection/protos/*.proto --python_out=.
 
