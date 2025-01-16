@@ -13,6 +13,7 @@ labelImg
 
 pip install tensorflow
 pip install tensorflow-io
+pip install absl-py protobuf numpy pandas pillow lxml matplotlib opencv-python tensorflow-addons Cython contextlib2
 
 
 
@@ -20,10 +21,7 @@ pip install tensorflow-io
 
 git clone https://github.com/tensorflow/models.git
 cd models/research
-
-pip install protobuf
 python object_detection/packages/tf2/setup.py install
-
 
 Powershell
 $env:PYTHONPATH="$env:PYTHONPATH;$PWD\models\research;$PWD\models\research\slim"

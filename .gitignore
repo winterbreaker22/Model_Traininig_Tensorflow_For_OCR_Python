@@ -1,4 +1,4 @@
 /dataset/images
 /dataset/labels
 /models
-/tf_od_env
+/venv
