@@ -23,8 +23,6 @@ $env:PYTHONPATH="$env:PYTHONPATH;$PWD\models\research;$PWD\models\research\slim"
 
 # Protoc Setup and compile
 
-pip install protobuf==3.20.3
-
 Download protoc.exe or zip file
 Add protoc.exe to Env Variable
 
