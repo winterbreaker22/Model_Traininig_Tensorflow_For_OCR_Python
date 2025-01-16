@@ -13,7 +13,7 @@ labelImg
 
 pip install tensorflow
 pip install tensorflow-io
-pip install absl-py protobuf numpy pandas pillow lxml matplotlib opencv-python tensorflow-addons Cython contextlib2
+pip install absl-py numpy pandas pillow lxml matplotlib opencv-python tensorflow-addons Cython contextlib2
 
 
 
@@ -32,6 +32,8 @@ $env:PYTHONPATH="$env:PYTHONPATH;$PWD\models\research;$PWD\models\research\slim"
 
 Download protoc.exe or zip file
 Add protoc.exe to Env Variable
+
+pip install protobuf==3.20.3
 
 
 
