@@ -2,18 +2,24 @@
 
 # Python version 3.10
 
-# Packages install
-
-pip install tensorflow
-pip install tensorflow-io
-pip install numpy pandas pillow lxml matplotlib opencv-python tensorflow-addons Cython contextlib2 gin-config pyyaml
-
-
-
 # Clone the TensorFlow Models Repository
 
 git clone https://github.com/tensorflow/models.git
-cd models/research
+cd models/
+
+
+
+# Packages install
+
+pip install tensorflow-text==2.10.0
+pip install tensorflow==2.10.1
+pip install tensorflow-io
+
+cd official
+pip install -r requirements.txt
+
+cd ..
+cd research
 python object_detection/packages/tf2/setup.py install
 
 Powershell
