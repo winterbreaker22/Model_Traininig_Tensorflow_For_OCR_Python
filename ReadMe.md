@@ -22,11 +22,8 @@ cd ..
 cd research
 python object_detection/packages/tf2/setup.py install
 
-Cmd
-set PYTHONPATH=%cd%;%cd%\slim
-
 Powershell
-$env:PYTHONPATH = "$(Get-Location):$(Get-Location)\slim"
+$env:PYTHONPATH="$env:PYTHONPATH;$PWD\models\research;$PWD\models\research\slim"
 
 
 # Protoc Setup and compile
