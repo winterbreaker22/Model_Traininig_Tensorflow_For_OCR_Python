@@ -20,6 +20,7 @@ pip install -r requirements.txt
 
 cd ..
 cd research
+in object_detection/packages/tf2/setup.py set version of tf-models-official package
 python object_detection/packages/tf2/setup.py install
 
 Powershell
