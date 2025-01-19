@@ -60,7 +60,6 @@ def write_tfrecord(xml_dir, image_dir, output_path):
     writer = tf.io.TFRecordWriter(output_path)
     
     xml_files = glob.glob(os.path.join(xml_dir, "*.xml"))
-    print(xml_files)
     
     for xml_file in xml_files:
         tf_example = create_example(xml_file, image_dir)
@@ -70,9 +69,9 @@ def write_tfrecord(xml_dir, image_dir, output_path):
 
 
 if __name__ == "__main__":
-    xml_dir = '../dataset/labels'
-    image_dir = '../dataset/images'
-    output_path = '../dataset/train.tfrecord'
+    xml_dir = f'{os.getcwd()}/dataset/labels'
+    image_dir = f'{os.getcwd()}/dataset/images'
+    output_path = f'{os.getcwd()}/dataset/train.tfrecord'
     
     write_tfrecord(xml_dir, image_dir, output_path)
     print("TFRecord file created:", output_path)
