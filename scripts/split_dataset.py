@@ -25,4 +25,4 @@ def split_dataset(image_dir, label_dir, train_dir, eval_dir, train_percentage=0.
         shutil.move(os.path.join(label_dir, img.replace('.jpg', '.xml')), os.path.join(eval_dir, 'labels', img.replace('.jpg', '.xml')))
 
 if __name__ == "__main__":
-    split_dataset('/dataset/images', '/dataset/labels', '/dataset/train', '/dataset/eval')
+    split_dataset(f'{os.getcwd()}/dataset/images', f'{os.getcwd()}/dataset/labels', f'{os.getcwd()}/dataset/train', f'{os.getcwd()}/dataset/eval')
