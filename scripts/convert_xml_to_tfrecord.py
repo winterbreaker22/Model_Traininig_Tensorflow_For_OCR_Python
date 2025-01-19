@@ -3,26 +3,20 @@ import tensorflow as tf
 from object_detection.utils import dataset_util
 from lxml import etree
 import glob
-import pathlib
 
-# Function to convert XML annotation into a dict
 def create_example(annotation_file, image_dir):
     tree = etree.parse(annotation_file)
     root = tree.getroot()
 
-    # Get image filename
     filename = root.find("filename").text
     image_path = os.path.join(image_dir, filename)
     
-    # Read image
     with tf.io.gfile.GFile(image_path, 'rb') as fid:
         encoded_image = fid.read()
 
-    # Get image dimensions
     width = int(root.find("size/width").text)
     height = int(root.find("size/height").text)
 
-    # Get the annotations (bounding boxes and labels)
     xmins = []
     xmaxs = []
     ymins = []
@@ -42,10 +36,9 @@ def create_example(annotation_file, image_dir):
         ymaxs.append(ymax)
 
         class_name = obj.find("name").text
-        classes.append(1)  # Assuming all objects are of class 1 (customize as needed)
+        classes.append(1)  # Assuming all objects are of class 1
         classes_text.append(class_name.encode('utf8'))
 
-    # Create the TFRecord example
     feature_dict = {
         'image/height': dataset_util.int64_feature(height),
         'image/width': dataset_util.int64_feature(width),
@@ -63,12 +56,11 @@ def create_example(annotation_file, image_dir):
     return example
 
 
-# Function to write the TFRecord file
 def write_tfrecord(xml_dir, image_dir, output_path):
     writer = tf.io.TFRecordWriter(output_path)
     
-    # Loop through all XML files in the annotation directory
     xml_files = glob.glob(os.path.join(xml_dir, "*.xml"))
+    print(xml_files)
     
     for xml_file in xml_files:
         tf_example = create_example(xml_file, image_dir)
@@ -78,9 +70,9 @@ def write_tfrecord(xml_dir, image_dir, output_path):
 
 
 if __name__ == "__main__":
-    xml_dir = '/path/to/dataset/labels'  # Path to your XML annotations
-    image_dir = '/path/to/dataset/images'  # Path to your images
-    output_path = '/path/to/dataset/train.tfrecord'  # Path to save the TFRecord
+    xml_dir = '../dataset/labels'
+    image_dir = '../dataset/images'
+    output_path = '../dataset/train.tfrecord'
     
     write_tfrecord(xml_dir, image_dir, output_path)
     print("TFRecord file created:", output_path)
