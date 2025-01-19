@@ -1,23 +1,21 @@
-import os
-import subprocess
+import tensorflow as tf
+from object_detection.model_lib import eval_loop
+from object_detection.utils import config_util
+from object_detection.protos import pipeline_pb2
+from google.protobuf import text_format
 
-# Set paths for evaluation
-pipeline_config_path = '/path/to/model/ssd_mobilenet_v2_fpnlite_320x320_coco17_tpu-8/pipeline.config'
-model_dir = '/path/to/model/my_model'
-checkpoint_dir = '/path/to/model/my_model/checkpoint'
+def main():
+    pipeline_config_path = "/model/ssd_mobilenet_v2_fpnlite_320x320_coco17_tpu-8/pipeline.config"
+    model_dir = "/train_output"  
 
-# TensorFlow Object Detection evaluation command
-command = [
-    'python', 
-    'models/research/object_detection/model_main_tf2.py', 
-    '--pipeline_config_path={}'.format(pipeline_config_path),
-    '--model_dir={}'.format(model_dir),
-    '--checkpoint_dir={}'.format(checkpoint_dir),
-    '--alsologtostderr',
-    '--eval'
-]
+    pipeline_config = pipeline_pb2.TrainEvalPipelineConfig()
+    with tf.io.gfile.GFile(pipeline_config_path, "r") as f:
+        proto_str = f.read()
+        text_format.Merge(proto_str, pipeline_config)
 
-# Run the evaluation
-print("Starting evaluation...")
-subprocess.run(command, check=True)
-print("Evaluation complete!")
+    configs = config_util.create_configs_from_pipeline_proto(pipeline_config_path)
+
+    eval_loop(pipeline_config, model_dir)
+
+if __name__ == "__main__":
+    main()
