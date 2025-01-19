@@ -1,40 +1,50 @@
-import tensorflow as tf
-from object_detection import model_lib_v2
-from object_detection.protos import pipeline_pb2
-from google.protobuf import text_format
 import os
-from object_detection.utils import config_util
+import sys
+import tensorflow as tf
+from object_detection import model_main_tf2
+from absl import app
 
-def train_model(config_path, output_dir):
-    pipeline_config = pipeline_pb2.TrainEvalPipelineConfig()
-    with tf.io.gfile.GFile(config_path, "r") as f:
-        proto_str = f.read()
-        text_format.Merge(proto_str, pipeline_config)
+def train_model(pipeline_config_path, model_dir, num_train_steps=10000, use_tpu=False):
+    os.makedirs(model_dir, exist_ok=True)
+    checkpoint_dir = os.path.join(model_dir, 'checkpoints')
+    log_dir = os.path.join(model_dir, 'logs')
+    eval_dir = os.path.join(model_dir, 'eval')
+    os.makedirs(checkpoint_dir, exist_ok=True)
+    os.makedirs(log_dir, exist_ok=True)
+    os.makedirs(eval_dir, exist_ok=True)
 
-    config = config_util.create_configs_from_pipeline_proto(pipeline_config)
+    if not os.path.exists(pipeline_config_path):
+        raise FileNotFoundError(f"Pipeline config file not found: {pipeline_config_path}")
 
-    train_input_fn = config['train_input_fn']
-    eval_input_fn = config['eval_input_fn']
+    sys.argv = [
+        'model_main_tf2.py', 
+        '--pipeline_config_path', pipeline_config_path,
+        '--model_dir', model_dir,
+        '--num_train_steps', str(num_train_steps),
+        '--checkpoint_every_n', '1000', 
+        '--eval_timeout', '300',  
+        '--alsologtostderr', 
+    ]
 
-    model_config = config['model']
-    checkpoint_dir = output_dir  
+    if use_tpu:
+        tpu_name = None  
+        
+        if tpu_name is None:
+            raise ValueError("Please provide a TPU Name to connect to.")
+        
+        resolver = tf.distribute.cluster_resolver.TPUClusterResolver(tpu_name)
+        tf.config.experimental_connect_to_cluster(resolver)
+        tf.tpu.experimental.initialize_tpu_system(resolver)
+        strategy = tf.distribute.experimental.TPUStrategy(resolver)
+    else:
+        strategy = tf.compat.v2.distribute.MirroredStrategy()  
 
-    if not os.path.exists(output_dir):
-        os.makedirs(output_dir)
+    app.run(model_main_tf2.main)
 
-    model_lib_v2.train_loop(
-        pipeline_config=pipeline_config,
-        model_dir=output_dir,  
-        config=config,
-        train_input_fn=train_input_fn,
-        eval_input_fn=eval_input_fn
-    )
+if __name__ == '__main__':
+    pipeline_config_path = f'{os.getcwd()}/model/ssd_mobilenet_v2_fpnlite_320x320_coco17_tpu-8/pipeline.config' 
+    model_dir = f'{os.getcwd()}/train_output' 
+    num_train_steps = 10000  
+    use_tpu = False 
 
-if __name__ == "__main__":
-    config_path = f'{os.getcwd()}/model/ssd_mobilenet_v2_fpnlite_320x320_coco17_tpu-8/pipeline.config' 
-
-    output_dir = f'{os.getcwd()}/train_output'
-
-    train_model(config_path, output_dir)
-
-    print(f"Training completed. Outputs are saved to: {output_dir}")
+    train_model(pipeline_config_path, model_dir, num_train_steps, use_tpu)
