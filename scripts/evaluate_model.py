@@ -1,22 +1,42 @@
 import os
+import sys
 import tensorflow as tf
-from object_detection.model_lib import eval_loop
-from object_detection.utils import config_util
-from object_detection.protos import pipeline_pb2
-from google.protobuf import text_format
+from object_detection import model_main_tf2
+from absl import app
 
-def main():
-    pipeline_config_path = f"{os.getcwd()}/model/ssd_mobilenet_v2_fpnlite_320x320_coco17_tpu-8/pipeline.config"
-    model_dir = f"{os.getcwd()}/train_output"  
+def evaluate_model(pipeline_config_path, model_dir, use_tpu=False):
+    eval_dir = os.path.join(model_dir, 'eval')
+    os.makedirs(eval_dir, exist_ok=True)
 
-    pipeline_config = pipeline_pb2.TrainEvalPipelineConfig()
-    with tf.io.gfile.GFile(pipeline_config_path, "r") as f:
-        proto_str = f.read()
-        text_format.Merge(proto_str, pipeline_config)
+    if not os.path.exists(pipeline_config_path):
+        raise FileNotFoundError(f"Pipeline config file not found: {pipeline_config_path}")
 
-    configs = config_util.create_configs_from_pipeline_proto(pipeline_config_path)
+    sys.argv = [
+        'model_main_tf2.py', 
+        '--pipeline_config_path', pipeline_config_path,
+        '--model_dir', model_dir,
+        '--eval_timeout', '300',  
+        '--alsologtostderr',
+    ]
 
-    eval_loop(pipeline_config, model_dir)
+    if use_tpu:
+        tpu_name = None  
+        
+        if tpu_name is None:
+            raise ValueError("Please provide a TPU Name to connect to.")
+        
+        resolver = tf.distribute.cluster_resolver.TPUClusterResolver(tpu_name)
+        tf.config.experimental_connect_to_cluster(resolver)
+        tf.tpu.experimental.initialize_tpu_system(resolver)
+        strategy = tf.distribute.experimental.TPUStrategy(resolver)
+    else:
+        strategy = tf.compat.v2.distribute.MirroredStrategy()  
 
-if __name__ == "__main__":
-    main()
+    app.run(model_main_tf2.main)
+
+if __name__ == '__main__':
+    pipeline_config_path = f'{os.getcwd()}/model/ssd_mobilenet_v2_fpnlite_320x320_coco17_tpu-8/pipeline.config'  
+    model_dir = f'{os.getcwd()}/train_output' 
+    use_tpu = False 
+
+    evaluate_model(pipeline_config_path, model_dir, use_tpu)
