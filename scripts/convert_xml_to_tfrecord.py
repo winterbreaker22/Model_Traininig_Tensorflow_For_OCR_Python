@@ -1,6 +1,7 @@
 import os
 import tensorflow as tf
 from object_detection.utils import dataset_util
+from object_detection.utils import label_map_util
 from lxml import etree
 import glob
 
@@ -69,9 +70,19 @@ def write_tfrecord(xml_dir, image_dir, output_path):
 
 
 if __name__ == "__main__":
-    xml_dir = f'{os.getcwd()}/dataset/labels'
-    image_dir = f'{os.getcwd()}/dataset/images'
-    output_path = f'{os.getcwd()}/dataset/train.tfrecord'
+    label_map_path = '/dataset/label_map.pbtxt'
+    label_map = label_map_util.load_labelmap(label_map_path)
     
-    write_tfrecord(xml_dir, image_dir, output_path)
-    print("TFRecord file created:", output_path)
+    # Write train TFRecord
+    train_xml_dir = '/dataset/train/labels'
+    train_image_dir = '/dataset/train/images'
+    train_output_path = '/dataset/train/train.tfrecord'
+    write_tfrecord(train_xml_dir, train_image_dir, train_output_path, label_map)
+
+    # Write eval TFRecord
+    eval_xml_dir = '/dataset/eval/labels'
+    eval_image_dir = '/dataset/eval/images'
+    eval_output_path = '/dataset/eval/eval.tfrecord'
+    write_tfrecord(eval_xml_dir, eval_image_dir, eval_output_path, label_map)
+
+    print("TFRecord files created!")
