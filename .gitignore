@@ -1,6 +1,4 @@
 /dataset/images
-/dataset/train
-/dataset/eval
 /dataset/labels
 /models
 /venv
