@@ -5,3 +5,4 @@
 /models
 /venv
 /train_output
+/exported_model
