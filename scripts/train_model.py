@@ -17,7 +17,7 @@ def train_model(pipeline_config_path, model_dir, num_train_steps=10000, use_tpu=
         raise FileNotFoundError(f"Pipeline config file not found: {pipeline_config_path}")
 
     sys.argv = [
-        'model_main_tf2.py', 
+        'model_main_tf2.py',  
         '--pipeline_config_path', pipeline_config_path,
         '--model_dir', model_dir,
         '--num_train_steps', str(num_train_steps),

@@ -25,6 +25,7 @@ python object_detection/packages/tf2/setup.py install
 
 Powershell
 $env:PYTHONPATH="$env:PYTHONPATH;$PWD\models\research;$PWD\models\research\slim"
+$env:TF_ENABLE_ONEDNN_OPTS="0"
 
 
 # Protoc Setup and compile
