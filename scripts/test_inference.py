@@ -1,35 +1,72 @@
 import tensorflow as tf
-import numpy as np
 import cv2
 import os
-from object_detection.utils import label_map_util
-from object_detection.utils import visualization_utils as vis_util
+import numpy as np
 
-model = tf.saved_model.load(f'{os.getcwd()}/exported_model/saved_model')
 
-label_map_path = f'{os.getcwd()}/dataset/label_map.pbtxt'
-category_index = label_map_util.create_category_index_from_labelmap(label_map_path, use_display_name=True)
+def draw_bounding_boxes(image, boxes, scores, classes, threshold=0.2):
+    """
+    Draws bounding boxes on the image based on detected objects.
 
-image_path = f'{os.getcwd()}/test/test.jpg'
-image_np = cv2.imread(image_path)
-image_np_rgb = cv2.cvtColor(image_np, cv2.COLOR_BGR2RGB)
+    Parameters:
+    - image: The input image.
+    - boxes: Detected bounding boxes (normalized coordinates).
+    - scores: Confidence scores for each box.
+    - classes: Detected class labels for each box.
+    - threshold: Minimum confidence threshold for displaying a box.
+    """
+    image_height, image_width, _ = image.shape
 
-input_tensor = tf.convert_to_tensor(image_np_rgb)
-input_tensor = input_tensor[tf.newaxis,...]
+    for i in range(len(scores[0])):
+        if scores[0][i] >= threshold:
+            box = boxes[0][i]
+            print("box: ", box)
+            ymin, xmin, ymax, xmax = box
 
-detections = model(input_tensor)
-print("detections: ", detections)
+            xmin = int(xmin * image_width)
+            xmax = int(xmax * image_width)
+            ymin = int(ymin * image_height)
+            ymax = int(ymax * image_height)
 
-vis_util.visualize_boxes_and_labels_on_image_array(
-    image_np,
-    detections['detection_boxes'][0].numpy(),
-    detections['detection_classes'][0].numpy().astype(np.int32),
-    detections['detection_scores'][0].numpy(),
-    category_index,
-    instance_masks=detections.get('detection_masks', None),
-    use_normalized_coordinates=True,
-    line_thickness=8)
+            cv2.rectangle(image, (xmin, ymin), (xmax, ymax), (0, 0, 255), 2)  
 
-cv2.imshow('Inference Result', image_np)
-cv2.waitKey(0)
-cv2.destroyAllWindows()
+            label = f"Class: {int(classes[0][i])}, Score: {scores[0][i]:.2f}"
+            cv2.putText(image, label, (xmin, ymin - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 0, 0), 2)
+
+    return image
+
+
+def simple_test(image_path, model_path, threshold=0.2):
+    """
+    Loads the model and performs object detection on the input image.
+
+    Parameters:
+    - image_path: Path to the input image.
+    - model_path: Path to the exported SavedModel.
+    - threshold: Minimum confidence threshold for displaying detections.
+    """
+    image = cv2.imread(image_path)
+    image_resized = cv2.resize(image, (300, 300))
+    image_resized = np.expand_dims(image_resized, axis=0) 
+    model = tf.saved_model.load(model_path)
+    model_fn = model.signatures['serving_default']
+
+    input_tensor = tf.convert_to_tensor(image_resized, dtype=tf.uint8)
+    detections = model_fn(input_tensor)
+
+    detection_boxes = detections['detection_boxes'].numpy()
+    detection_scores = detections['detection_scores'].numpy()
+    detection_classes = detections['detection_classes'].numpy()
+
+    image_with_boxes = draw_bounding_boxes(image, detection_boxes, detection_scores, detection_classes, threshold)
+
+    cv2.imshow("Detections", image_with_boxes)
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
+
+
+if __name__ == "__main__":
+    IMAGE_PATH = f"{os.getcwd()}/test/test.jpg" 
+    MODEL_PATH = f"{os.getcwd()}/exported_model/saved_model" 
+
+    simple_test(IMAGE_PATH, MODEL_PATH)
