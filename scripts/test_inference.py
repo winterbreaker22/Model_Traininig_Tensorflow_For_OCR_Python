@@ -5,36 +5,12 @@ import pytesseract
 import os
 from object_detection.utils import label_map_util
 
-# Ensure the Tesseract executable path is correctly set
-pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
-
-
 def load_label_map(label_map_path):
-    """
-    Loads the label map from a label_map.pbtxt file.
-
-    Parameters:
-    - label_map_path: Path to the label map file (label_map.pbtxt).
-
-    Returns:
-    - A dictionary with class_id as keys and field names as values.
-    """
     label_map = label_map_util.create_categories_from_labelmap(label_map_path, use_display_name=True)
     return {item['id']: item['name'] for item in label_map}
 
 
 def draw_bounding_boxes(image, boxes, scores, classes, label_map, threshold):
-    """
-    Draws bounding boxes on the image based on detected objects and prints field names and text.
-
-    Parameters:
-    - image: The input image.
-    - boxes: Detected bounding boxes (normalized coordinates).
-    - scores: Confidence scores for each box.
-    - classes: Detected class labels for each box.
-    - label_map: A dictionary with class_id as keys and field names as values.
-    - threshold: Minimum confidence threshold for displaying a box.
-    """
     image_height, image_width, _ = image.shape
 
     highest_score_boxes = {}
