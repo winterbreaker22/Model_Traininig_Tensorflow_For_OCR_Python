@@ -44,9 +44,9 @@ def draw_bounding_boxes(image, boxes, scores, classes, label_map, threshold):
 
         field_name = label_map.get(class_id, f"Unknown Field {class_id}")
 
-        print(f"{field_name}: {text.strip()}")
+        print(f"{field_name}: {text}")
 
-        label = f"{field_name}: {text.strip()}"
+        label = f"{field_name}: {text}"
         cv2.putText(image, label, (xmin, ymin - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 0, 0), 2)
 
     return image
