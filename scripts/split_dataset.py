@@ -10,7 +10,6 @@ def split_dataset(image_dir, label_dir, train_dir, eval_dir, train_percentage=0.
     train_images = images[:train_size]
     eval_images = images[train_size:]
 
-    # Create directories for training and evaluation data
     os.makedirs(os.path.join(train_dir, 'images'), exist_ok=True)
     os.makedirs(os.path.join(train_dir, 'labels'), exist_ok=True)
     os.makedirs(os.path.join(eval_dir, 'images'), exist_ok=True)

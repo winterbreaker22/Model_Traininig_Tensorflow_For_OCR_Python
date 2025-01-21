@@ -5,7 +5,7 @@ from absl import app
 
 FLAGS = flags.FLAGS
 
-FLAGS.pipeline_config_path = f'{os.getcwd()}/model/ssd_mobilenet_v2_fpnlite_320x320_coco17_tpu-8/pipeline.config'
+FLAGS.pipeline_config_path = f'{os.getcwd()}/train_output/pipeline.config'
 FLAGS.trained_checkpoint_dir = f'{os.getcwd()}/train_output'
 FLAGS.output_directory = f'{os.getcwd()}/exported_model'
 FLAGS.input_type = 'image_tensor'

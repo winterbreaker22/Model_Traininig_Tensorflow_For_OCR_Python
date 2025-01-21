@@ -12,18 +12,17 @@ def evaluate_model(pipeline_config_path, model_dir, checkpoint_dir, use_tpu=Fals
     if not os.path.exists(pipeline_config_path):
         raise FileNotFoundError(f"Pipeline config file not found: {pipeline_config_path}")
 
-    # Modify sys.argv to call model_main_tf2.py with evaluation flags
     sys.argv = [
         'model_main_tf2.py', 
         '--pipeline_config_path', pipeline_config_path,
         '--model_dir', model_dir,
-        '--checkpoint_dir', checkpoint_dir,  # Specify the correct checkpoint directory
+        '--checkpoint_dir', checkpoint_dir,  
         '--eval_timeout', '300',
-        '--alsologtostderr',  # This will log to stderr as well
+        '--alsologtostderr', 
     ]
 
     if use_tpu:
-        tpu_name = None  # Define your TPU name here, if using one
+        tpu_name = None  
         
         if tpu_name is None:
             raise ValueError("Please provide a TPU Name to connect to.")
@@ -38,9 +37,9 @@ def evaluate_model(pipeline_config_path, model_dir, checkpoint_dir, use_tpu=Fals
     app.run(model_main_tf2.main)
 
 if __name__ == '__main__':
-    pipeline_config_path = f'{os.getcwd()}/model/ssd_mobilenet_v2_fpnlite_320x320_coco17_tpu-8/pipeline.config'
+    pipeline_config_path = f'{os.getcwd()}/train_output/pipeline.config'
     model_dir = f'{os.getcwd()}/train_output'
-    checkpoint_dir = f'{os.getcwd()}/train_output'  # This should be the directory with model checkpoints
-    use_tpu = False  # Set True if using TPU
+    checkpoint_dir = f'{os.getcwd()}/train_output' 
+    use_tpu = False  
 
     evaluate_model(pipeline_config_path, model_dir, checkpoint_dir, use_tpu)
