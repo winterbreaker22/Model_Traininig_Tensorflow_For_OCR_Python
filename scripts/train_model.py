@@ -42,7 +42,7 @@ def train_model(pipeline_config_path, model_dir, num_train_steps=10000, use_tpu=
     app.run(model_main_tf2.main)
 
 if __name__ == '__main__':
-    pipeline_config_path = f'{os.getcwd()}/train_output/pipeline.config' 
+    pipeline_config_path = f'{os.getcwd()}/pipeline.config' 
     model_dir = f'{os.getcwd()}/train_output' 
     num_train_steps = 10000  
     use_tpu = False 

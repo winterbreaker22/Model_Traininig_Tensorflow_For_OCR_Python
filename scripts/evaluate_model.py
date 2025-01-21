@@ -37,7 +37,7 @@ def evaluate_model(pipeline_config_path, model_dir, checkpoint_dir, use_tpu=Fals
     app.run(model_main_tf2.main)
 
 if __name__ == '__main__':
-    pipeline_config_path = f'{os.getcwd()}/train_output/pipeline.config'
+    pipeline_config_path = f'{os.getcwd()}/pipeline.config'
     model_dir = f'{os.getcwd()}/train_output'
     checkpoint_dir = f'{os.getcwd()}/train_output' 
     use_tpu = False  
