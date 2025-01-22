@@ -121,7 +121,7 @@ def preprocess_multiple_images(image_folder, xml_folder, target_size=(512, 512))
 
 # Define paths
 image_folder = 'dataset/images'
-xml_folder = 'dataset/annotations'
+xml_folder = 'dataset/labels'
 
 # Run preprocessing  
 preprocess_multiple_images(image_folder, xml_folder)  
