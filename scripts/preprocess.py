@@ -67,7 +67,6 @@ def preprocess_image(image_path, xml_path, target_size=(512, 512)):
     Ensures padding is centered, avoiding distortion.
     Updates bounding box annotations to align with resized and padded images.
     """
-    import xml.etree.ElementTree as ET
 
     # Load the image
     img = cv2.imread(image_path)
