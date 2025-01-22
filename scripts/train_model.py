@@ -44,7 +44,7 @@ def train_model(pipeline_config_path, model_dir, num_train_steps=10000, use_tpu=
 if __name__ == '__main__':
     pipeline_config_path = f'{os.getcwd()}/pipeline.config' 
     model_dir = f'{os.getcwd()}/train_output' 
-    num_train_steps = 10000  
+    num_train_steps = 20000  
     use_tpu = False 
 
     train_model(pipeline_config_path, model_dir, num_train_steps, use_tpu)
