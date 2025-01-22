@@ -5,16 +5,21 @@ from object_detection.utils import label_map_util
 import xml.etree.ElementTree as ET
 
 def create_example(xml_file, image_dir, label_map):
+    """
+    Creates a TensorFlow Example from a single XML annotation file and corresponding image,
+    using normalized bounding box values.
+    """
     tree = ET.parse(xml_file)
     root = tree.getroot()
 
+    # Get image file name and path
     filename = root.find("filename").text
     image_path = os.path.join(image_dir, filename)
 
     with tf.io.gfile.GFile(image_path, 'rb') as fid:
         encoded_image_data = fid.read()
 
-    image_format = b'jpg'
+    image_format = b'jpg'  # Adjust if your images are PNG or other formats
 
     xmins = []
     xmaxs = []
@@ -24,15 +29,17 @@ def create_example(xml_file, image_dir, label_map):
     classes = []
 
     for obj in root.findall('object'):
+        # Get class name and ID
         class_name = obj.find('name').text
         class_id = label_map.get(class_name, None)
         if class_id is None:
-            continue  
+            continue  # Skip unknown classes
 
-        xmin = float(obj.find('bndbox/xmin').text) / 1024 
-        ymin = float(obj.find('bndbox/ymin').text) / 1024 
-        xmax = float(obj.find('bndbox/xmax').text) / 1024
-        ymax = float(obj.find('bndbox/ymax').text) / 1024
+        # Use normalized bounding box values
+        xmin = float(obj.find('bndbox/normalized_xmin').text)
+        ymin = float(obj.find('bndbox/normalized_ymin').text)
+        xmax = float(obj.find('bndbox/normalized_xmax').text)
+        ymax = float(obj.find('bndbox/normalized_ymax').text)
 
         xmins.append(xmin)
         ymins.append(ymin)
@@ -41,6 +48,7 @@ def create_example(xml_file, image_dir, label_map):
         classes.append(class_id)
         class_names.append(class_name)
 
+    # Prepare feature dictionary for TFRecord
     feature_dict = {
         'image/encoded': tf.train.Feature(bytes_list=tf.train.BytesList(value=[encoded_image_data])),
         'image/format': tf.train.Feature(bytes_list=tf.train.BytesList(value=[image_format])),
@@ -58,6 +66,9 @@ def create_example(xml_file, image_dir, label_map):
     return example
 
 def write_tfrecord(xml_dir, image_dir, output_path, label_map):
+    """
+    Writes multiple XML annotations and their corresponding images to a TFRecord file.
+    """
     writer = tf.io.TFRecordWriter(output_path)
     
     xml_files = glob.glob(os.path.join(xml_dir, "*.xml"))
@@ -68,18 +79,26 @@ def write_tfrecord(xml_dir, image_dir, output_path, label_map):
     writer.close()
 
 if __name__ == "__main__":
-    train_image_dir = f'{os.getcwd()}/dataset/train/images' 
-    train_label_dir = f'{os.getcwd()}/dataset/train/labels' 
-    eval_image_dir = f'{os.getcwd()}/dataset/eval/images'    
-    eval_label_dir = f'{os.getcwd()}/dataset/eval/labels'  
+    # Paths to image and annotation directories
+    # train_image_dir = f'{os.getcwd()}/dataset/train/images' 
+    # train_label_dir = f'{os.getcwd()}/dataset/train/labels' 
+    # eval_image_dir = f'{os.getcwd()}/dataset/eval/images'    
+    # eval_label_dir = f'{os.getcwd()}/dataset/eval/labels'  
+    image_dir = f'{os.getcwd()}/dataset/images'    
+    label_dir = f'{os.getcwd()}/dataset/labels'  
 
+    # Label map path
     label_map_path = f'{os.getcwd()}/dataset/label_map.pbtxt'  
     label_map = label_map_util.get_label_map_dict(label_map_path)
 
-    train_output_path = f'{os.getcwd()}/dataset/train/train.tfrecord'
-    eval_output_path = f'{os.getcwd()}/dataset/eval/eval.tfrecord'
+    # TFRecord output paths
+    # train_output_path = f'{os.getcwd()}/dataset/train/train.tfrecord'
+    # eval_output_path = f'{os.getcwd()}/dataset/eval/eval.tfrecord'
+    output_path = f'{os.getcwd()}/dataset/data.tfrecord'
 
-    write_tfrecord(train_label_dir, train_image_dir, train_output_path, label_map)
-    write_tfrecord(eval_label_dir, eval_image_dir, eval_output_path, label_map)
+    # Create TFRecord files
+    # write_tfrecord(train_label_dir, train_image_dir, train_output_path, label_map)
+    # write_tfrecord(eval_label_dir, eval_image_dir, eval_output_path, label_map)
+    write_tfrecord(label_dir, image_dir, output_path, label_map)
 
     print("TFRecord files created successfully!")
