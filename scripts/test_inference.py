@@ -63,8 +63,8 @@ def simple_test(image_path, model_path, label_map, threshold):
     - threshold: Minimum confidence threshold for displaying detections.
     """
     image = cv2.imread(image_path)
-    image_resized = cv2.resize(image, (512, 512))
-    image_resized = np.expand_dims(image_resized, axis=0)
+    # image_resized = cv2.resize(image, (512, 512))
+    image_resized = np.expand_dims(image, axis=0)
     model = tf.saved_model.load(model_path)
     model_fn = model.signatures['serving_default']
 
@@ -89,4 +89,4 @@ if __name__ == "__main__":
 
     label_map = load_label_map(LABEL_MAP_PATH)
 
-    simple_test(IMAGE_PATH, MODEL_PATH, label_map, threshold=0.1)
+    simple_test(IMAGE_PATH, MODEL_PATH, label_map, threshold=0.12)
