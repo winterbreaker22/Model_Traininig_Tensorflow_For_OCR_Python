@@ -80,25 +80,25 @@ def write_tfrecord(xml_dir, image_dir, output_path, label_map):
 
 if __name__ == "__main__":
     # Paths to image and annotation directories
-    # train_image_dir = f'{os.getcwd()}/dataset/train/images' 
-    # train_label_dir = f'{os.getcwd()}/dataset/train/labels' 
-    # eval_image_dir = f'{os.getcwd()}/dataset/eval/images'    
-    # eval_label_dir = f'{os.getcwd()}/dataset/eval/labels'  
-    image_dir = f'{os.getcwd()}/dataset/images'    
-    label_dir = f'{os.getcwd()}/dataset/labels'  
+    train_image_dir = f'{os.getcwd()}/dataset/train/images' 
+    train_label_dir = f'{os.getcwd()}/dataset/train/labels' 
+    eval_image_dir = f'{os.getcwd()}/dataset/eval/images'    
+    eval_label_dir = f'{os.getcwd()}/dataset/eval/labels'  
+    # image_dir = f'{os.getcwd()}/dataset/images'    
+    # label_dir = f'{os.getcwd()}/dataset/labels'  
 
     # Label map path
     label_map_path = f'{os.getcwd()}/dataset/label_map.pbtxt'  
     label_map = label_map_util.get_label_map_dict(label_map_path)
 
     # TFRecord output paths
-    # train_output_path = f'{os.getcwd()}/dataset/train/train.tfrecord'
-    # eval_output_path = f'{os.getcwd()}/dataset/eval/eval.tfrecord'
-    output_path = f'{os.getcwd()}/dataset/data.tfrecord'
+    train_output_path = f'{os.getcwd()}/dataset/train/train.tfrecord'
+    eval_output_path = f'{os.getcwd()}/dataset/eval/eval.tfrecord'
+    # output_path = f'{os.getcwd()}/dataset/data.tfrecord'
 
     # Create TFRecord files
-    # write_tfrecord(train_label_dir, train_image_dir, train_output_path, label_map)
-    # write_tfrecord(eval_label_dir, eval_image_dir, eval_output_path, label_map)
-    write_tfrecord(label_dir, image_dir, output_path, label_map)
+    write_tfrecord(train_label_dir, train_image_dir, train_output_path, label_map)
+    write_tfrecord(eval_label_dir, eval_image_dir, eval_output_path, label_map)
+    # write_tfrecord(label_dir, image_dir, output_path, label_map)
 
     print("TFRecord files created successfully!")
