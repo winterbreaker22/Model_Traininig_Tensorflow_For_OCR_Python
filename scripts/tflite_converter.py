@@ -2,10 +2,9 @@ import tensorflow as tf
 
 converter = tf.lite.TFLiteConverter.from_saved_model("exported_model/saved_model")
 
-# Enable Flex ops (to handle unsupported TensorFlow operations like StridedSlice)
 converter.target_spec.supported_ops = [
-    tf.lite.OpsSet.TFLITE_BUILTINS,  # Default TFLite ops
-    tf.lite.OpsSet.SELECT_TF_OPS     # Enable TensorFlow ops (Flex delegate)
+    tf.lite.OpsSet.TFLITE_BUILTINS,   
+    tf.lite.OpsSet.SELECT_TF_OPS     
 ]
 
 try:
@@ -18,4 +17,7 @@ try:
 except Exception as e:
     print(f"Error during conversion: {e}")
 
-tf.lite.experimental.Analyzer.analyze(model_path='exported_model/model.tflite')
+try:
+    tf.lite.experimental.Analyzer.analyze(model_path='exported_model/model.tflite')
+except Exception as e:
+    print(f"Error during model analysis: {e}")
