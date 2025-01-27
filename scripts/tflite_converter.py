@@ -17,3 +17,5 @@ try:
 
 except Exception as e:
     print(f"Error during conversion: {e}")
+
+tf.lite.experimental.Analyzer.analyze(model_path='exported_model/model.tflite')
