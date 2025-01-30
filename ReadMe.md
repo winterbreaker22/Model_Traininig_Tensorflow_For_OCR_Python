@@ -3,6 +3,8 @@
 
 # Python version 3.10
 
+Create venv
+
 # Clone the TensorFlow Models Repository
 
 git clone https://github.com/tensorflow/models.git
