@@ -146,7 +146,11 @@ def simple_test(image_path, model_path, label_map, threshold):
     model_fn = model.signatures['serving_default']
 
     input_tensor = tf.convert_to_tensor(np.expand_dims(padded_image, axis=0), dtype=tf.uint8)
+    print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
+    print("input_tensor: ", input_tensor)
     detections = model_fn(input_tensor)
+
+    print("detections: ", detections)
 
     detection_boxes = detections['detection_boxes'].numpy()
     detection_scores = detections['detection_scores'].numpy()
