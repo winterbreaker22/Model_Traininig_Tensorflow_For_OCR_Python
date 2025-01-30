@@ -12,15 +12,15 @@ cd models/
 # Packages install
 
 pip install tensorflow-text==2.10.0
-pip install tensorflow==2.10.1
-pip install tensorflow-io
+pip install tensorflow==2.15.0
+pip install tensorflow-io==2.15.0
 
 cd official
 pip install -r requirements.txt
 
 cd ..
 cd research
-set version of tf-models-official package in object_detection/packages/tf2/setup.py 
+set version of tf-models-official package as 2.15.0 in object_detection/packages/tf2/setup.py 
 python object_detection/packages/tf2/setup.py install
 
 Powershell
