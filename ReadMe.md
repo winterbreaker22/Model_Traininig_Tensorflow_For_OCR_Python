@@ -4,6 +4,7 @@
 # Python version 3.10
 
 Create venv
+venv/Scripts/activate
 
 # Clone the TensorFlow Models Repository
 
