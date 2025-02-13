@@ -14,6 +14,7 @@ cd models/
 
 # Packages install
 
+pip install tensorflow-text==2.10.0
 pip install tensorflow==2.15.0
 pip install tensorflow-io==2.15.0
 
